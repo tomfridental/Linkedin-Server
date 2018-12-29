@@ -20,6 +20,11 @@ app.use(express.static(path.resolve('./build')))
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 
+app.get('/', (req,res) => {
+    res.send('Everythign is ok!')
+})
+
+
 app.get('*', (req, res)=> {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
