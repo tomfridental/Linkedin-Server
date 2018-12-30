@@ -5,19 +5,19 @@ const Post = require('../db/post.model');
 const Like = require('../db/like.model');
 const Comment = require('../db/comment.model');
 const SubComment = require('../db/subcomment.model')
-const multer = require('multer')
+// const multer = require('multer')
 const cloudinary = require('cloudinary');
 
-const storage = multer.diskStorage({
-    destination(req, file, cb){ './files'},
-    filename(req, file, cb) {
-        cb(null, `${file.originalname}`);
-    },
-});
+// const storage = multer.diskStorage({
+//     destination(req, file, cb){ './files'},
+//     filename(req, file, cb) {
+//         cb(null, `${file.originalname}`);
+//     },
+// });
 
 // const storage = multer.memoryStorage()
 
-const upload = multer({ storage });
+// const upload = multer({ storage });
 
 cloudinary.config({
     cloud_name: 'tomfr',
