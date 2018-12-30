@@ -40,50 +40,50 @@ router.get('/test', (req,res) => {
 })
 
 //Create new Post
-router.post('/create/post', upload.single('img'), async (req, res, next) => {
-    try {
-        let body = JSON.parse(req.body.text)
-        if (req.file) {
-            let result = await cloudinary.v2.uploader.upload(req.file.path)
-            const post = new Post({...body, img: result.url});
-            await post.save()
-            let postAuthUser = await User.findById(body.userID).lean()
-            let postInfo = await Post.findById(post._id).lean()
-            let newPost = {
-                likes: [],
-                comments: [],
-                postAuthUser: postAuthUser,
-                ...postInfo
-            }
-            res.json({
-                msg: 'User Saved!',
-                postSaved: true,
-                post: newPost
-            })
-        }
+// router.post('/create/post', upload.single('img'), async (req, res, next) => {
+//     try {
+//         let body = JSON.parse(req.body.text)
+//         if (req.file) {
+//             let result = await cloudinary.v2.uploader.upload(req.file.path)
+//             const post = new Post({...body, img: result.url});
+//             await post.save()
+//             let postAuthUser = await User.findById(body.userID).lean()
+//             let postInfo = await Post.findById(post._id).lean()
+//             let newPost = {
+//                 likes: [],
+//                 comments: [],
+//                 postAuthUser: postAuthUser,
+//                 ...postInfo
+//             }
+//             res.json({
+//                 msg: 'User Saved!',
+//                 postSaved: true,
+//                 post: newPost
+//             })
+//         }
 
 
-        else {
-            const post = new Post(body);
-            await post.save()
-            let postAuthUser = await User.findById(body.userID).lean()
-            let postInfo = await Post.findById(post._id).lean()
-            let newPost = {
-                likes: [],
-                comments: [],
-                postAuthUser: postAuthUser,
-                ...postInfo
-            }
-            res.json({
-                msg: 'User Saved!',
-                postSaved: true,
-                post: newPost
-            })
-        }
-    } catch (err) {
-        console.log(err)
-    }
-})
+//         else {
+//             const post = new Post(body);
+//             await post.save()
+//             let postAuthUser = await User.findById(body.userID).lean()
+//             let postInfo = await Post.findById(post._id).lean()
+//             let newPost = {
+//                 likes: [],
+//                 comments: [],
+//                 postAuthUser: postAuthUser,
+//                 ...postInfo
+//             }
+//             res.json({
+//                 msg: 'User Saved!',
+//                 postSaved: true,
+//                 post: newPost
+//             })
+//         }
+//     } catch (err) {
+//         console.log(err)
+//     }
+// })
 
 //Create new Comment
 router.post('/create/comment', async (req, res, next) => {
@@ -277,24 +277,24 @@ router.get('/posts/:id', async (req, res, next) => {
 })
 
 //Finish Signup with user Avatar
-router.post('/finish/:id', upload.single('avatar'), async (req, res) => {
+// router.post('/finish/:id', upload.single('avatar'), async (req, res) => {
 
-    try {
-        const selectedUser = await User.findById(req.params.id);
+//     try {
+//         const selectedUser = await User.findById(req.params.id);
 
-        let result = await cloudinary.v2.uploader.upload(req.file.path)
+//         let result = await cloudinary.v2.uploader.upload(req.file.path)
 
 
-        await selectedUser.updateOne({ registrationWizard: 'done', avatar: result.url })
-        const updatedUser = await User.findById(req.params.id)
+//         await selectedUser.updateOne({ registrationWizard: 'done', avatar: result.url })
+//         const updatedUser = await User.findById(req.params.id)
 
-        res.json({ selectedUserUpdate: updatedUser })
+//         res.json({ selectedUserUpdate: updatedUser })
 
-    }
-    catch (err) {
-        console.log(err)
-    }
-})
+//     }
+//     catch (err) {
+//         console.log(err)
+//     }
+// })
 
 router.post('/finish/noavatar/:id', async (req, res) => {
 
