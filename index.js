@@ -15,10 +15,10 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors());
 
-// app.use(express.static(path.resolve('./build')))
+app.use(express.static(path.resolve('./build')))
 
-// app.use('/api/auth', authRouter)
-// app.use('/api/user', userRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/user', userRouter)
 
 app.get('/', (req,res) => {
     res.send('Everythign is ok!')
@@ -35,5 +35,3 @@ db.connect();
 const server = app.listen( API_PORT, ()=> {
     console.log(`Listening on ${API_HOST}:${API_PORT}`)
 })
-
-//

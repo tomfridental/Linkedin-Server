@@ -23,7 +23,8 @@ const options = {
 
   const {DB_HOST, DB_PORT, DB_NAME} = process.env
 
-const uri = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
+// const uri = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
+const uri = 'mongodb://tomfr:ortaltom1@ds145434.mlab.com:45434/tomfr'
 
 const connect = async ()=> {
     try{

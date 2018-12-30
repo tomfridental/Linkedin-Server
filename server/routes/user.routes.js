@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const User = require('../db/user.model')
 const Post = require('../db/post.model');
 const Like = require('../db/like.model');
@@ -9,11 +9,13 @@ const multer = require('multer')
 const cloudinary = require('cloudinary');
 
 const storage = multer.diskStorage({
-    destination: './files',
+    destination(req, file, cb){ './files'},
     filename(req, file, cb) {
         cb(null, `${file.originalname}`);
     },
 });
+
+// const storage = multer.memoryStorage()
 
 const upload = multer({ storage });
 
@@ -30,7 +32,11 @@ router.use(express.json())
 
 //Test Route
 router.get('/', (req, res) => {
-    res.status(200).send('Everything is ok!')
+    res.json({Hellllo: 'Worlddd'})
+})
+
+router.get('/test', (req,res) => {
+    res.send('Woho!')
 })
 
 //Create new Post
@@ -204,6 +210,7 @@ router.get('/comment/:id', async (req, res, next) => {
 
 //Get User info
 router.get('/:id', async (req, res, next) => {
+    alert('starting')
     try {
         const user = await User.findById(req.params.id)
         res.json({ user })
@@ -304,48 +311,4 @@ router.post('/finish/noavatar/:id', async (req, res) => {
     }
 })
 
-// router.post('/testing', upload.single('img'), async (req, res) => {
-//     try {
-//         let body = JSON.parse(req.body.text)
-//         if (req.file) {
-//             let result = await cloudinary.v2.uploader.upload(req.file.path)
-//             const post = new Post({...body, img: result.url});
-//             await post.save()
-//             let postAuthUser = await User.findById(body.userID).lean()
-//             let postInfo = await Post.findById(post._id).lean()
-//             let newPost = {
-//                 likes: [],
-//                 comments: [],
-//                 postAuthUser: postAuthUser,
-//                 ...postInfo
-//             }
-//             res.json({
-//                 msg: 'User Saved!',
-//                 postSaved: true,
-//                 post: newPost
-//             })
-//         }
-
-
-//         else {
-//             const post = new Post(body);
-//             await post.save()
-//             let postAuthUser = await User.findById(body.userID).lean()
-//             let postInfo = await Post.findById(post._id).lean()
-//             let newPost = {
-//                 likes: [],
-//                 comments: [],
-//                 postAuthUser: postAuthUser,
-//                 ...postInfo
-//             }
-//             res.json({
-//                 msg: 'User Saved!',
-//                 postSaved: true,
-//                 post: newPost
-//             })
-//         }
-//     } catch (err) {
-//         console.log(err)
-//     }
-// })
 module.exports = router
