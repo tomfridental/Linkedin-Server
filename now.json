@@ -2,10 +2,25 @@
     "version": 2,
     "name": "nodejs-express",
     "builds": [
-        { "src": "/index.js", "use": "@now/node-server" }
+        {
+            "src": "/index.js",
+            "use": "@now/node-server"
+        }
     ],
     "routes": [
-        { "src": "/(.*)", "dest": "/index.js" }
-    ]
- }
- 
+        {
+            "src": "/(.*)",
+            "dest": "/index.js"
+        }
+    ],
+    "env": {
+        "NODE_ENV": "development",
+        "API_HOST": "localhost",
+        "API_PORT": "3030",
+        "DB_HOST": "ortal:ortal1@ds145434.mlab.com:45434",
+        "DB_PORT": "45434",
+        "DB_NAME": "tomfr",
+        "APP_SECRET": "halamadridyenadamas",
+        "TOKEN_EXPIRE_SECONDS": "86400"
+    }
+}

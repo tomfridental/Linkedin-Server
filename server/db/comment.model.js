@@ -9,4 +9,4 @@ const CommentSchema = new Schema({
 }, { timestamps: true });
 
 
-module.exports = mongoose.model('Linkedin-Comments', CommentSchema);
+module.exports = mongoose.model('linkedin-comments', CommentSchema);

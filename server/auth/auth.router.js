@@ -7,6 +7,7 @@ const User = require('../db/user.model');
 
 const router = express.Router();
 router.use(express.json());
+
 const {
     verify_token,
     false_response,
@@ -44,12 +45,14 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ email })
     if (!user) return res.status(401).json({
         ...false_response,
-        message: '201'
+        message: '201',
+        sentData: req.body
     })
     const password_is_valid = await bcryptjs.compare(password, user.password)
     if (!password_is_valid) return res.status(401).json({
         ...false_response,
-        message: '201'
+        message: '202',
+        sentData: req.body
     })
 
     const token = tokenize(user._id)
@@ -80,7 +83,7 @@ router.post('/update/:id', async (req,res,next) => {
     
     try {
         const selectedUser = await User.findById(req.params.id)
-        await selectedUser.update(req.body)
+        await selectedUser.updateOne(req.body)
         const updatedUser = await User.findById(req.params.id)
         res.json({ selectedUserUpdate: updatedUser})
     } catch (err) {

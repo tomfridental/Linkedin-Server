@@ -10,4 +10,4 @@ const SubCommentSchema = new Schema({
 }, { timestamps: true });
 
 
-module.exports = mongoose.model('Linkedin-Sub-Comments', SubCommentSchema);
+module.exports = mongoose.model('linkedin-sub-comments', SubCommentSchema);

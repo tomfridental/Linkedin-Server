@@ -1,23 +1,14 @@
 const express = require('express');
-// const mongoose = require('mongoose');
 const User = require('../db/user.model')
 const Post = require('../db/post.model');
 const Like = require('../db/like.model');
 const Comment = require('../db/comment.model');
 const SubComment = require('../db/subcomment.model')
-// const multer = require('multer')
+const multer = require('multer')
 const cloudinary = require('cloudinary');
 
-// const storage = multer.diskStorage({
-//     destination(req, file, cb){ './files'},
-//     filename(req, file, cb) {
-//         cb(null, `${file.originalname}`);
-//     },
-// });
 
-// const storage = multer.memoryStorage()
-
-// const upload = multer({ storage });
+var upload = multer({ dest: '/tmp/uploads' })
 
 cloudinary.config({
     cloud_name: 'tomfr',
@@ -32,58 +23,54 @@ router.use(express.json())
 
 //Test Route
 router.get('/', (req, res) => {
-    res.json({Hellllo: 'Worlddd'})
-})
-
-router.get('/test', (req,res) => {
-    res.send('Woho!')
+    res.json({ Hello: 'Worlddd' })
 })
 
 //Create new Post
-// router.post('/create/post', upload.single('img'), async (req, res, next) => {
-//     try {
-//         let body = JSON.parse(req.body.text)
-//         if (req.file) {
-//             let result = await cloudinary.v2.uploader.upload(req.file.path)
-//             const post = new Post({...body, img: result.url});
-//             await post.save()
-//             let postAuthUser = await User.findById(body.userID).lean()
-//             let postInfo = await Post.findById(post._id).lean()
-//             let newPost = {
-//                 likes: [],
-//                 comments: [],
-//                 postAuthUser: postAuthUser,
-//                 ...postInfo
-//             }
-//             res.json({
-//                 msg: 'User Saved!',
-//                 postSaved: true,
-//                 post: newPost
-//             })
-//         }
+router.post('/create/post', upload.single('img'), async (req, res, next) => {
+    try {
+        let body = JSON.parse(req.body.text)
+        if (req.file) {
+            let result = await cloudinary.v2.uploader.upload(req.file.path)
+            const post = new Post({ ...body, img: result.url });
+            await post.save()
+            let postAuthUser = await User.findById(body.userID).lean()
+            let postInfo = await Post.findById(post._id).lean()
+            let newPost = {
+                likes: [],
+                comments: [],
+                postAuthUser: postAuthUser,
+                ...postInfo
+            }
+            res.json({
+                msg: 'User Saved!',
+                postSaved: true,
+                post: newPost
+            })
+        }
 
 
-//         else {
-//             const post = new Post(body);
-//             await post.save()
-//             let postAuthUser = await User.findById(body.userID).lean()
-//             let postInfo = await Post.findById(post._id).lean()
-//             let newPost = {
-//                 likes: [],
-//                 comments: [],
-//                 postAuthUser: postAuthUser,
-//                 ...postInfo
-//             }
-//             res.json({
-//                 msg: 'User Saved!',
-//                 postSaved: true,
-//                 post: newPost
-//             })
-//         }
-//     } catch (err) {
-//         console.log(err)
-//     }
-// })
+        else {
+            const post = new Post(body);
+            await post.save()
+            let postAuthUser = await User.findById(body.userID).lean()
+            let postInfo = await Post.findById(post._id).lean()
+            let newPost = {
+                likes: [],
+                comments: [],
+                postAuthUser: postAuthUser,
+                ...postInfo
+            }
+            res.json({
+                msg: 'User Saved!',
+                postSaved: true,
+                post: newPost
+            })
+        }
+    } catch (err) {
+        console.log('New Error: ', err)
+    }
+})
 
 //Create new Comment
 router.post('/create/comment', async (req, res, next) => {
@@ -105,7 +92,7 @@ router.post('/create/comment', async (req, res, next) => {
             comment: newComment
         })
     } catch (err) {
-        next(new Error(err))
+        console.log('New Error: ', err)
     }
 })
 
@@ -128,7 +115,7 @@ router.post('/create/subcomment', async (req, res, next) => {
             subcomment: newComment
         })
     } catch (err) {
-        next(new Error(err))
+        console.log('New Error: ', err)
     }
 })
 
@@ -146,7 +133,7 @@ router.post('/create/like', async (req, res, next) => {
             res.json({ likeMsg: 'Like Saved!' })
         }
     } catch (err) {
-        next(new Error(err))
+        console.log('New Error: ', err)
     }
 })
 
@@ -170,7 +157,7 @@ router.get('/likes/:id', async (req, res, next) => {
 
 
     } catch (err) {
-        next(new Error(err))
+        console.log('New Error: ', err)
     }
 })
 
@@ -204,19 +191,19 @@ router.get('/comment/:id', async (req, res, next) => {
             postID: req.params.id
         })
     } catch (err) {
-        next(new Error(err))
+        console.log('New Error: ', err)
     }
 })
 
 //Get User info
 router.get('/:id', async (req, res, next) => {
-    alert('starting')
+
     try {
         const user = await User.findById(req.params.id)
         res.json({ user })
 
     } catch (err) {
-        next(new Error(err))
+        console.log('New Error: ', err)
     }
 })
 
@@ -228,7 +215,7 @@ router.get('/userstofallow/:id', async (req, res, next) => {
         res.json({ users })
 
     } catch (err) {
-        next(new Error(err))
+        console.log('New Error: ', err)
     }
 })
 
@@ -247,7 +234,7 @@ router.get('/profile/:id', async (req, res, next) => {
         })
 
     } catch (err) {
-        next(new Error(err))
+        console.log('New Error: ', err)
     }
 })
 
@@ -272,43 +259,68 @@ router.get('/posts/:id', async (req, res, next) => {
         }
         res.json([...newArr])
     } catch (err) {
-        next(new Error(err))
+        console.log('New Error: ', err)
     }
 })
 
 //Finish Signup with user Avatar
-// router.post('/finish/:id', upload.single('avatar'), async (req, res) => {
-
-//     try {
-//         const selectedUser = await User.findById(req.params.id);
-
-//         let result = await cloudinary.v2.uploader.upload(req.file.path)
-
-
-//         await selectedUser.updateOne({ registrationWizard: 'done', avatar: result.url })
-//         const updatedUser = await User.findById(req.params.id)
-
-//         res.json({ selectedUserUpdate: updatedUser })
-
-//     }
-//     catch (err) {
-//         console.log(err)
-//     }
-// })
-
-router.post('/finish/noavatar/:id', async (req, res) => {
+router.post('/finish/:id', upload.single('avatar'), async (req, res) => {
 
     try {
         const selectedUser = await User.findById(req.params.id);
-        await selectedUser.updateOne({ registrationWizard: 'done', avatar: '' })
+
+        let result = await cloudinary.v2.uploader.upload(req.file.path)
+
+
+        await selectedUser.updateOne({ registrationWizard: 'done', avatar: result.url })
         const updatedUser = await User.findById(req.params.id)
 
         res.json({ selectedUserUpdate: updatedUser })
 
     }
     catch (err) {
-        console.log(err)
+        console.log('New Error: ', err)
     }
 })
 
+router.post('/finish/noavatar/:id', async (req, res) => {
+
+    try {
+        const selectedUser = await User.findById(req.params.id);
+        await selectedUser.updateOne({ registrationWizard: 'done', avatar: 'https://res.cloudinary.com/tomfr/image/upload/v1546460228/blank-profile-picture-973460_960_720.png' })
+        const updatedUser = await User.findById(req.params.id)
+
+        res.json({ selectedUserUpdate: updatedUser })
+
+    }
+    catch (err) {
+        console.log('New Error: ', err)
+    }
+})
+
+//Get 10 Last Users for Search Result  || Get Users match the search term
+router.get('/search/:id', async (req, res) => {
+    try {
+    
+        if (req.query.search !== "") {
+            const searchSuggestions = await User.find({_id: { $ne: req.params.id },
+                $or: [
+                {first_name: { "$regex": req.query.search, "$options": "i" }},
+                {last_name: { "$regex": req.query.search, "$options": "i" }}
+                ]
+            }).sort({ createdAt: -1 }).limit(10);
+            
+            res.json(searchSuggestions)
+        
+        } else {
+            const searchSuggestions = await User.find({ _id: { $ne: req.params.id } }).sort({ createdAt: -1 }).limit(10);
+            res.json(searchSuggestions)
+        }
+
+    }
+    catch (err) {
+        console.log('Your Error is: ', err)
+        res.json(err)
+    }
+})
 module.exports = router

@@ -8,4 +8,4 @@ const LikeSchema = new Schema({
 }, { timestamps: true });
 
 
-module.exports = mongoose.model('Linkedin-Likes', LikeSchema);
+module.exports = mongoose.model('linkedin-likes', LikeSchema);

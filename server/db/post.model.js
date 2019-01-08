@@ -10,4 +10,4 @@ const PostSchema = new Schema({
 }, { timestamps: true });
 
 
-module.exports = mongoose.model('Linkedin-Posts', PostSchema);
+module.exports = mongoose.model('linkedin-posts', PostSchema);
